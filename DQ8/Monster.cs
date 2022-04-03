@@ -12,7 +12,8 @@ namespace DQ8
 
 		public Monster(uint ID)
 		{
-			mAddress = ID * 8 + 0x2D9C;
+			// OLD: mAddress = ID * 8 + 0x2D9C;
+			mAddress = ID * 8 + Offsets.GetAddress("DefeatedMonster");
 		}
 
 		public String Name { get; set; }

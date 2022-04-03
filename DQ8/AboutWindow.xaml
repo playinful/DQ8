@@ -5,12 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DQ8"
         mc:Ignorable="d"
-        Title="Info" Height="113.592" Width="233.738" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Info" Height="203.392" Width="256.705" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel>
-            <Label Content="Creater ： カメムシ"/>
-            <Label Content="HP ： http://turtleinsect.php.xdomain.jp/" MouseDown="LabelHP_MouseDown"/>
-            <Label Content="Mail ： turtle.insect@gmail.com"/>
+            <Label Content="Creator ： カメムシ"/>
+            <TextBlock Padding="5,5,5,5" >HP ： <Hyperlink  Name="Hyperlink_turtleinsectHomepage" NavigateUri="http://turtleinsect.php.xdomain.jp/" Click="Hyperlink_Click">http://turtleinsect.php.xdomain.jp/</Hyperlink></TextBlock>
+            <TextBlock Padding="5,5,5,5">Mail ： <Hyperlink Name="Hyperlink_turtleinsectMail"     NavigateUri="mailto:turtle.insect@gmail.com" Click="Hyperlink_Click">turtle.insect@gmail.com</Hyperlink></TextBlock>
+            <Separator/>
+            <Label Content="Translation ： playinful"/>
+            <TextBlock Padding="5,5,5,5" >GitHub ： <Hyperlink Name="Hyperlink_playinfulGithub" NavigateUri="https://github.com/playinful" Click="Hyperlink_Click">https://github.com/playinful</Hyperlink ></TextBlock>
+            <TextBlock Padding="5,5,5,5">Twitter ： <Hyperlink Name="Hyperlink_playinfulTwitter" NavigateUri="https://twitter.com/playinful" Click="Hyperlink_Click">https://twitter.com/playinful</Hyperlink></TextBlock>
         </StackPanel>
     </Grid>
 </Window>

@@ -20,12 +20,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadBit(0x10208 + mNumber / 8, mNumber % 8);
+				// OLD: return SaveData.Instance().ReadBit(0x10208 + mNumber / 8, mNumber % 8);
+				return SaveData.Instance().ReadBit(Offsets.GetAddress("AlchemyBook") + mNumber / 8, mNumber % 8);
 			}
 
 			set
 			{
-				SaveData.Instance().WriteBit(0x10208 + mNumber / 8, mNumber % 8, value);
+				// OLD: SaveData.Instance().WriteBit(0x10208 + mNumber / 8, mNumber % 8, value);
+				SaveData.Instance().WriteBit(Offsets.GetAddress("AlchemyBook") + mNumber / 8, mNumber % 8, value);
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Exist"));
 			}
 		}

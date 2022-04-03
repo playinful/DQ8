@@ -5,6 +5,8 @@ namespace DQ8
 {
 	class Info
 	{
+		public string Mode { get; set; } = "JP"; // "NA" or "JP"
+
 		private static Info mThis;
 		public List<NameValue> Items { get; private set; } = new List<NameValue>();
 		public List<NameValue> Places { get; private set; } = new List<NameValue>();

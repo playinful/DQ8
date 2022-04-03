@@ -22,17 +22,22 @@ namespace DQ8
 			// 人物
 			List<List<String>> skills = new List<List<string>>()
 			{
-				new List<String>{"剣スキル", "ヤリスキル", "ブーメラン", "格闘スキル", "ゆうき" },
-				new List<String>{"オノスキル", "打撃スキル", "鎌スキル", "格闘スキル", "にんじょう" },
-				new List<String>{"短剣スキル", "ムチスキル", "杖スキル", "格闘スキル", "おいろけ" },
-				new List<String>{"剣スキル", "弓スキル", "杖スキル", "格闘スキル", "カリスマ" },
-				new List<String>{"扇スキル", "ムチスキル", "短剣スキル", "格闘スキル", "アウトロー" },
-				new List<String>{"爪スキル", "打撃スキル", "ブーメラン", "格闘スキル", "ねっけつ" },
+				new List<String>{"Swords", "Spears", "Boomerangs", "Fisticuffs", "Courage"    },
+				new List<String>{"Axes"  , "Clubs" , "Scythes"   , "Fisticuffs", "Humanity"   },
+				new List<String>{"Knives", "Whips" , "Staves"    , "Fisticuffs", "Sex Appeal" },
+				new List<String>{"Swords", "Bows"  , "Staves"    , "Fisticuffs", "Charisma"   },
+				new List<String>{"Fans"  , "Whips" , "Knives"    , "Fisticuffs", "Roguery"    },
+				new List<String>{"Claws" , "Clubs" , "Boomerangs", "Fisticuffs", "Passion"    },
 			};
 			foreach (var member in Info.Instance().Orders)
 			{
 				if (member.Value == 0xFF) continue;
-				Charactor ch = new Charactor(0x11EC + member.Value * 64, 0xA10 + member.Value * 34, skills[(int)member.Value]);
+				// OLD : Charactor ch = new Charactor(0x11EC + member.Value * 64, 0xA10 + member.Value * 34, skills[(int)member.Value]);
+				Charactor ch = new Charactor(
+					Offsets.GetAddress("PartyStatus") + member.Value * Offsets.GetLength("PartyStatus"),
+					Offsets.GetAddress("PartyItem")   + member.Value * Offsets.GetLength("PartyItem"),
+					skills[(int)member.Value]
+				);
 				ch.Name = member.Name;
 				Party.Add(ch);
 			}
@@ -48,7 +53,8 @@ namespace DQ8
 			// パーティ並び
 			for (uint i = 0; i < 6; i++)
 			{
-				Orders.Add(new Order(0x11A0 + i));
+				// OLD: Orders.Add(new Order(0x11A0 + i));
+				Orders.Add(new Order(Offsets.GetAddress("Order") + i));
 			}
 
 			// 錬金釜
@@ -73,26 +79,27 @@ namespace DQ8
 			// バトルロードモンスター
 			for (uint i = 0; i < 24; i++)
 			{
-				BattleLoadMonsters.Add(new BattleMonster(0x13F0 + i * 8));
+				// OLD: BattleLoadMonsters.Add(new BattleMonster(0x13F0 + i * 8));
+				BattleLoadMonsters.Add(new BattleMonster(Offsets.GetAddress("BattleMonster") + i * 8));
 			}
 
 			String[] names = { "G", "F", "E", "D", "C", "B", "A", "S" };
 			for (uint i = 0; i < names.Length; i++)
 			{
-				Ranks.Add(new BattleMonsterRank(i) { Name = "ランク" + names[i] });
+				Ranks.Add(new BattleMonsterRank(i) { Name = "Rank " + names[i] });
 			}
 		}
 
 		public uint PlayHour
-		{
+		{ //TODO
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x2C48, 4) / 3600;
+				return SaveData.Instance().ReadNumber("PlayTime") / 3600;
 			}
 			set
 			{
 				uint number = SaveData.Instance().ReadNumber(0x2C48, 4) % 3600;
-				SaveData.Instance().WriteNumber(0x2C48, 4, value * 3600 + number);
+				SaveData.Instance().WriteNumber("PlayTime", value * 3600 + number);
 			}
 		}
 
@@ -100,13 +107,13 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x2C48, 4) % 3600 / 60;
+				return SaveData.Instance().ReadNumber("PlayTime") % 3600 / 60;
 			}
 			set
 			{
-				uint number = SaveData.Instance().ReadNumber(0x2C48, 4);
+				uint number = SaveData.Instance().ReadNumber("PlayTime");
 				number = number / 3600 * 3600 + number % 60;
-				SaveData.Instance().WriteNumber(0x2C48, 4, value * 60 + number);
+				SaveData.Instance().WriteNumber("PlayTime", value * 60 + number);
 			}
 		}
 
@@ -114,13 +121,13 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x2C48, 4) % 60;
+				return SaveData.Instance().ReadNumber("PlayTime") % 60;
 			}
 			set
 			{
-				uint number = SaveData.Instance().ReadNumber(0x2C48, 4);
+				uint number = SaveData.Instance().ReadNumber("PlayTime");
 				number = number / 60 * 60;
-				SaveData.Instance().WriteNumber(0x2C48, 4, value + number);
+				SaveData.Instance().WriteNumber("PlayTime", value + number);
 			}
 		}
 
@@ -128,12 +135,13 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadUnicode(0x09F8, 8);
+				// OLD: return SaveData.Instance().ReadUnicode(0x09F8, 8);
+				return SaveData.Instance().ReadUnicode("HeroName");
 			}
 
 			set
 			{
-				SaveData.Instance().WriteUnicode(0x09F8, 8, value);
+				SaveData.Instance().WriteUnicode("HeroName", value);
 			}
 		}
 
@@ -141,11 +149,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x37FC, 4);
+				return SaveData.Instance().ReadNumber("BattleCount");
 			}
 			set
 			{
-				Util.WriteNumber(0x37FC, 4, value, 0, 9999999);
+				Util.WriteNumber("BattleCount", value, 0, 9999999);
 			}
 		}
 
@@ -153,11 +161,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x0A08, 4);
+				return SaveData.Instance().ReadNumber("GoldHand");
 			}
 			set
 			{
-				Util.WriteNumber(0x0A08, 4, value, 0, 99999999);
+				Util.WriteNumber("GoldHand", value, 0, 99999999);
 			}
 		}
 
@@ -165,11 +173,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x0A0C, 4);
+				return SaveData.Instance().ReadNumber("GoldBank");
 			}
 			set
 			{
-				Util.WriteNumber(0x0A0C, 4, value, 0, 99999000);
+				Util.WriteNumber("GoldBank", value, 0, 99999000);
 			}
 		}
 
@@ -177,11 +185,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x1564, 4);
+				return SaveData.Instance().ReadNumber("CasinoCoin");
 			}
 			set
 			{
-				Util.WriteNumber(0x1564, 4, value, 0, 99999999);
+				Util.WriteNumber("CasinoCoin", value, 0, 99999999);
 			}
 		}
 
@@ -189,11 +197,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x2B64, 4);
+				return SaveData.Instance().ReadNumber("SmallMedal");
 			}
 			set
 			{
-				Util.WriteNumber(0x2B64, 4, value, 0, 9999999);
+				Util.WriteNumber("SmallMedal", value, 0, 9999999);
 			}
 		}
 
@@ -201,11 +209,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x3800, 4);
+				return SaveData.Instance().ReadNumber("KillCount");
 			}
 			set
 			{
-				Util.WriteNumber(0x3800, 4, value, 0, 9999999);
+				Util.WriteNumber("KillCount", value, 0, 9999999);
 			}
 		}
 
@@ -213,11 +221,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x3804, 4);
+				return SaveData.Instance().ReadNumber("WardOffCount");
 			}
 			set
 			{
-				Util.WriteNumber(0x3804, 4, value, 0, 9999999);
+				Util.WriteNumber("WardOffCount", value, 0, 9999999);
 			}
 		}
 
@@ -225,11 +233,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x3808, 4);
+				return SaveData.Instance().ReadNumber("EscapeCount");
 			}
 			set
 			{
-				Util.WriteNumber(0x3808, 4, value, 0, 9999999);
+				Util.WriteNumber("EscapeCount", value, 0, 9999999);
 			}
 		}
 
@@ -237,11 +245,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x380C, 4);
+				return SaveData.Instance().ReadNumber("VictoryCount");
 			}
 			set
 			{
-				Util.WriteNumber(0x380C, 4, value, 0, 9999999);
+				Util.WriteNumber("VictoryCount", value, 0, 9999999);
 			}
 		}
 
@@ -249,11 +257,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x3810, 4);
+				return SaveData.Instance().ReadNumber("AnnihilationCount");
 			}
 			set
 			{
-				Util.WriteNumber(0x3810, 4, value, 0, 9999999);
+				Util.WriteNumber("AnnihilationCount", value, 0, 9999999);
 			}
 		}
 
@@ -261,11 +269,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x3814, 4);
+				return SaveData.Instance().ReadNumber("TotalGold");
 			}
 			set
 			{
-				Util.WriteNumber(0x3814, 4, value, 0, 9999999);
+				Util.WriteNumber("TotalGold", value, 0, 9999999);
 			}
 		}
 
@@ -273,11 +281,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x381C, 4);
+				return SaveData.Instance().ReadNumber("MaxDamage");
 			}
 			set
 			{
-				Util.WriteNumber(0x381C, 4, value, 0, 9999999);
+				Util.WriteNumber("MaxDamage", value, 0, 9999999);
 			}
 		}
 
@@ -285,12 +293,12 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadUnicode(0x13A8, 18);
+				return SaveData.Instance().ReadUnicode("TermName1");
 			}
 
 			set
 			{
-				SaveData.Instance().WriteUnicode(0x13A8, 18, value);
+				SaveData.Instance().WriteUnicode("TermName1", value);
 			}
 		}
 
@@ -298,12 +306,12 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadUnicode(0x13CC, 18);
+				return SaveData.Instance().ReadUnicode("TermName2");
 			}
 
 			set
 			{
-				SaveData.Instance().WriteUnicode(0x13CC, 18, value);
+				SaveData.Instance().WriteUnicode("TermName2", value);
 			}
 		}
 
@@ -311,11 +319,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x13C0, 1);
+				return SaveData.Instance().ReadNumber("Term11");
 			}
 			set
 			{
-				Util.WriteNumber(0x13C0, 1, value, 0, 23);
+				Util.WriteNumber("Term11", value, 0, 23);
 			}
 		}
 
@@ -323,11 +331,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x13C2, 1);
+				return SaveData.Instance().ReadNumber("Term12");
 			}
 			set
 			{
-				Util.WriteNumber(0x13C2, 1, value, 0, 23);
+				Util.WriteNumber("Term12", value, 0, 23);
 			}
 		}
 
@@ -335,11 +343,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x13C4, 1);
+				return SaveData.Instance().ReadNumber("Term13");
 			}
 			set
 			{
-				Util.WriteNumber(0x13C4, 1, value, 0, 23);
+				Util.WriteNumber("Term13", value, 0, 23);
 			}
 		}
 
@@ -347,11 +355,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x13E4, 1);
+				return SaveData.Instance().ReadNumber("Term21");
 			}
 			set
 			{
-				Util.WriteNumber(0x13E4, 1, value, 0, 23);
+				Util.WriteNumber("Term21", value, 0, 23);
 			}
 		}
 
@@ -359,11 +367,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x13E6, 1);
+				return SaveData.Instance().ReadNumber("Term22");
 			}
 			set
 			{
-				Util.WriteNumber(0x13E6, 1, value, 0, 23);
+				Util.WriteNumber("Term22", value, 0, 23);
 			}
 		}
 
@@ -371,11 +379,11 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x13E8, 1);
+				return SaveData.Instance().ReadNumber("Term23");
 			}
 			set
 			{
-				Util.WriteNumber(0x13E8, 1, value, 0, 23);
+				Util.WriteNumber("Term23", value, 0, 23);
 			}
 		}
 
@@ -383,12 +391,12 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(0x2B56, 1) == 1;
+				return SaveData.Instance().ReadNumber("Alchemy") == 1;
 			}
 
 			set
 			{
-				SaveData.Instance().WriteNumber(0x2B56, 1, value ? 1U : 0);
+				SaveData.Instance().WriteNumber("Alchemy", value ? 1U : 0);
 			}
 		}
 
@@ -396,12 +404,12 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadBit(0x0100, 2);
+				return SaveData.Instance().ReadBit("TermMake");
 			}
 
 			set
 			{
-				SaveData.Instance().WriteBit(0x0100, 2, value);
+				SaveData.Instance().WriteBit("TermMake", value);
 			}
 		}
 
@@ -409,12 +417,12 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadBit(0x04D6, 0);
+				return SaveData.Instance().ReadBit("TermCall");
 			}
 
 			set
 			{
-				SaveData.Instance().WriteBit(0x04D6, 0, value);
+				SaveData.Instance().WriteBit("TermCall", value);
 			}
 		}
 	}

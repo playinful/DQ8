@@ -32,7 +32,25 @@ namespace DQ8
 			mBuffer = System.IO.File.ReadAllBytes(mFileName);
 
 			Backup();
+
+			GetSetMode();
 		}
+		// playinful: this is called after we open a file to see which mode we should use.
+		public String GetSetMode()
+        {
+			switch(mBuffer.Length)
+            {
+				case 212560:
+				default:
+					Info.Instance().Mode = "NA";
+					break;
+				case 212104:
+					Info.Instance().Mode = "JP";
+					break;
+			}
+
+			return Info.Instance().Mode;
+        }
 
 		public bool Save()
 		{
@@ -60,6 +78,18 @@ namespace DQ8
 			}
 			return result;
 		}
+		// playinful: rewritten to be used with offset IDs
+		public uint ReadNumber(string offset_id, int addOffset = 0)
+		{
+			OffsetData offsetData = Offsets.GetOffsetData(offset_id);
+			if (offsetData != null)
+				return ReadNumber((uint)(offsetData.Start + addOffset), offsetData.Length);
+			return 0;
+		}
+		public uint ReadNumber(string offset_id, uint addOffset)
+        {
+			return ReadNumber(offset_id, (int)addOffset);
+        }
 
 		// 0 to 7.
 		public bool ReadBit(uint address, uint bit)
@@ -72,6 +102,14 @@ namespace DQ8
 			Byte mask = (Byte)(1 << (int)bit);
 			Byte result = (Byte)(mBuffer[address] & mask);
 			return result != 0;
+		}
+		// playinful: rewritten to be used with offset IDs
+		public bool ReadBit(string offset_id)
+		{
+			OffsetData offsetData = Offsets.GetOffsetData(offset_id);
+			if (offsetData != null)
+				return ReadBit(offsetData.Start, offsetData.Length);
+			return false;
 		}
 
 		public String ReadUnicode(uint address, uint size)
@@ -87,6 +125,14 @@ namespace DQ8
 			}
 			return System.Text.Encoding.Unicode.GetString(tmp).Trim('\0');
 		}
+		// playinful: rewritten to be used with offset IDs
+		public String ReadUnicode(string offset_id)
+		{
+			OffsetData offsetData = Offsets.GetOffsetData(offset_id);
+			if (offsetData != null)
+				return ReadUnicode(offsetData.Start, offsetData.Length);
+			return null;
+		}
 
 		public void WriteNumber(uint address, uint size, uint value)
 		{
@@ -98,6 +144,13 @@ namespace DQ8
 				mBuffer[address + i] = (Byte)(value & 0xFF);
 				value >>= 8;
 			}
+		}
+		// playinful: rewritten to be used with offset IDs
+		public void WriteNumber(string offset_id, uint value, int addOffset = 0)
+		{
+			OffsetData offsetData = Offsets.GetOffsetData(offset_id);
+			if (offsetData != null)
+				WriteNumber((uint)(offsetData.Start + addOffset), offsetData.Length, value);
 		}
 
 		// 0 to 7.
@@ -112,6 +165,13 @@ namespace DQ8
 			if (value) mBuffer[address] = (Byte)(mBuffer[address] | mask);
 			else mBuffer[address] = (Byte)(mBuffer[address] & ~mask);
 		}
+		// playinful: rewritten to be used with offset IDs
+		public void WriteBit(string offset_id, bool value)
+		{
+			OffsetData offsetData = Offsets.GetOffsetData(offset_id);
+			if (offsetData != null)
+				WriteBit(offsetData.Start, offsetData.Length, value);
+		}
 
 		public void WriteUnicode(uint address, uint size, String value)
 		{
@@ -124,6 +184,13 @@ namespace DQ8
 			{
 				mBuffer[address + i] = tmp[i];
 			}
+		}
+		// playinful: rewritten to be used with offset IDs
+		public void WriteUnicode(string offset_id, String value)
+		{
+			OffsetData offsetData = Offsets.GetOffsetData(offset_id);
+			if (offsetData != null)
+				WriteUnicode(offsetData.Start, offsetData.Length, value);
 		}
 
 		public void Fill(uint address, uint size, Byte number)
@@ -167,6 +234,9 @@ namespace DQ8
 
 		private uint CalcAddress(uint address)
 		{
+			// OLD: return address + Util.BlockSize_US * mAdventure;
+			// playinful: Replacing this to account for the different file sizes
+
 			return address + Util.BlockSize * mAdventure;
 		}
 

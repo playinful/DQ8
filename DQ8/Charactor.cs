@@ -19,7 +19,8 @@ namespace DQ8
 			mItemAddress = itemAddress;
 			for (uint i = 0; i < skillNames.Count; i++)
 			{
-				Skill skill = new Skill(mStatusAddress + 0x2C + i * 2);
+				// OLD: Skill skill = new Skill(mStatusAddress + 0x2C + i * 2);
+				Skill skill = new Skill(mStatusAddress + Offsets.GetAddress("PartySkillAddress") + i * Offsets.GetLength("PartySkillAddress"));
 				skill.Name = skillNames[(int)i];
 				Skills.Add(skill);
 			}
@@ -33,12 +34,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress, 2);
+				return SaveData.Instance().ReadNumber("PartyHP", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress, 2, value, 0, 999);
+				Util.WriteNumber("PartyHP", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -46,12 +49,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x08, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x08, 2);
+				return SaveData.Instance().ReadNumber("PartyMP", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x08, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x08, 2, value, 0, 999);
+				Util.WriteNumber("PartyMP", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -59,12 +64,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x14, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x14, 2);
+				return SaveData.Instance().ReadNumber("PartyLv", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x14, 2, value, 1, 99);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x14, 2, value, 1, 99);
+				Util.WriteNumber("PartyLv", value, 1, 99, mStatusAddress);
 			}
 		}
 
@@ -72,12 +79,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x0C, 4);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x0C, 4);
+				return SaveData.Instance().ReadNumber("PartyExp", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x0C, 4, value, 0, 9999999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x0C, 4, value, 0, 9999999);
+				Util.WriteNumber("PartyExp", value, 0, 9999999, mStatusAddress);
 			}
 		}
 
@@ -85,12 +94,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x16, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x16, 2);
+				return SaveData.Instance().ReadNumber("PartyPower", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x16, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x16, 2, value, 0, 999);
+				Util.WriteNumber("PartyPower", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -98,12 +109,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x18, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x18, 2);
+				return SaveData.Instance().ReadNumber("PartyDefense", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x18, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x18, 2, value, 0, 999);
+				Util.WriteNumber("PartyDefense", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -111,12 +124,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x1A, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x1A, 2);
+				return SaveData.Instance().ReadNumber("PartySpeed", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x1A, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x1A, 2, value, 0, 999);
+				Util.WriteNumber("PartySpeed", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -124,12 +139,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x1C, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x1C, 2);
+				return SaveData.Instance().ReadNumber("PartyCool", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x1C, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x1C, 2, value, 0, 999);
+				Util.WriteNumber("PartyCool", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -137,12 +154,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x20, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x20, 2);
+				return SaveData.Instance().ReadNumber("PartyHPPlus", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x20, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x20, 2, value, 0, 999);
+				Util.WriteNumber("PartyHPPlus", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -150,12 +169,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x22, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x22, 2);
+				return SaveData.Instance().ReadNumber("PartyMPPlus", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x22, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x22, 2, value, 0, 999);
+				Util.WriteNumber("PartyMPPlus", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -163,12 +184,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x24, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x24, 2);
+				return SaveData.Instance().ReadNumber("PartyPowerPlus", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x24, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x24, 2, value, 0, 999);
+				Util.WriteNumber("PartyPowerPlus", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -176,12 +199,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x26, 2);
+				// OLD: return SaveData.Instance().ReadNumber(mStatusAddress + 0x26, 2);
+				return SaveData.Instance().ReadNumber("PartyDefensePlus", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x26, 2, value, 0, 999);
+				// OLD: Util.WriteNumber(mStatusAddress + 0x26, 2, value, 0, 999);
+				Util.WriteNumber("PartyDefensePlus", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -189,12 +214,12 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x28, 2);
+				return SaveData.Instance().ReadNumber("PartySpeedPlus", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x28, 2, value, 0, 999);
+				Util.WriteNumber("PartySpeedPlus", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -202,12 +227,12 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x2A, 2);
+				return SaveData.Instance().ReadNumber("PartyCoolPlus", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x2A, 2, value, 0, 999);
+				Util.WriteNumber("PartyCoolPlus", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -215,12 +240,12 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadNumber(mStatusAddress + 0x36, 2);
+				return SaveData.Instance().ReadNumber("PartySkillPlus", mStatusAddress);
 			}
 
 			set
 			{
-				Util.WriteNumber(mStatusAddress + 0x36, 2, value, 0, 999);
+				Util.WriteNumber("PartySkillPlus", value, 0, 999, mStatusAddress);
 			}
 		}
 
@@ -228,7 +253,7 @@ namespace DQ8
 		{
 			get
 			{
-				int value = (int)SaveData.Instance().ReadNumber(mItemAddress + 0x18, 2);
+				int value = (int)SaveData.Instance().ReadNumber("PartyWeapon", mItemAddress);
 				if (value == 0xFFFF) value = -1;
 				return value;
 			}
@@ -237,7 +262,7 @@ namespace DQ8
 			{
 				uint num = (uint)value;
 				if (value == -1) num = 0xFFFF;
-				Util.WriteNumber(mStatusAddress + 0x18, 2, num, 0, 0xFFFF);
+				Util.WriteNumber("PartyWeapon", num, 0, 0xFFFF, mItemAddress);
 			}
 		}
 
@@ -245,7 +270,7 @@ namespace DQ8
 		{
 			get
 			{
-				int value = (int)SaveData.Instance().ReadNumber(mItemAddress + 0x1A, 2);
+				int value = (int)SaveData.Instance().ReadNumber("PartyArmor", mItemAddress);
 				if (value == 0xFFFF) value = -1;
 				return value;
 			}
@@ -254,7 +279,7 @@ namespace DQ8
 			{
 				uint num = (uint)value;
 				if (value == -1) num = 0xFFFF;
-				Util.WriteNumber(mStatusAddress + 0x1A, 2, num, 0, 0xFFFF);
+				Util.WriteNumber("PartyArmor", num, 0, 0xFFFF, mItemAddress);
 			}
 		}
 
@@ -262,7 +287,7 @@ namespace DQ8
 		{
 			get
 			{
-				int value = (int)SaveData.Instance().ReadNumber(mItemAddress + 0x1C, 2);
+				int value = (int)SaveData.Instance().ReadNumber("PartyShield", mItemAddress);
 				if (value == 0xFFFF) value = -1;
 				return value;
 			}
@@ -271,7 +296,7 @@ namespace DQ8
 			{
 				uint num = (uint)value;
 				if (value == -1) num = 0xFFFF;
-				Util.WriteNumber(mStatusAddress + 0x1C, 2, num, 0, 0xFFFF);
+				Util.WriteNumber("PartyShield", num, 0, 0xFFFF, mItemAddress);
 			}
 		}
 
@@ -279,7 +304,7 @@ namespace DQ8
 		{
 			get
 			{
-				int value = (int)SaveData.Instance().ReadNumber(mItemAddress + 0x1E, 2);
+				int value = (int)SaveData.Instance().ReadNumber("PartyHelmet", mItemAddress);
 				if (value == 0xFFFF) value = -1;
 				return value;
 			}
@@ -288,7 +313,7 @@ namespace DQ8
 			{
 				uint num = (uint)value;
 				if (value == -1) num = 0xFFFF;
-				Util.WriteNumber(mStatusAddress + 0x1E, 2, num, 0, 0xFFFF);
+				Util.WriteNumber("PartyHelmet", num, 0, 0xFFFF, mItemAddress);
 			}
 		}
 
@@ -296,7 +321,7 @@ namespace DQ8
 		{
 			get
 			{
-				int value = (int)SaveData.Instance().ReadNumber(mItemAddress + 0x20, 2);
+				int value = (int)SaveData.Instance().ReadNumber("PartyAccessory", mItemAddress);
 				if (value == 0xFFFF) value = -1;
 				return value;
 			}
@@ -305,7 +330,7 @@ namespace DQ8
 			{
 				uint num = (uint)value;
 				if (value == -1) num = 0xFFFF;
-				Util.WriteNumber(mStatusAddress + 0x20, 2, num, 0, 0xFFFF);
+				Util.WriteNumber("PartyAccessory", num, 0, 0xFFFF, mItemAddress);
 			}
 		}
 	}

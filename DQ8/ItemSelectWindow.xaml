@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DQ8"
         mc:Ignorable="d"
-        Title="アイテム選択" Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="Item Select" Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
     <Grid>
         <DockPanel>
             <DockPanel DockPanel.Dock="Top">
-                <Label Content="フィルタ"/>
+                <Label Content="Filter"/>
                 <TextBox x:Name="TextBoxFilter" TextChanged="TextBoxFilter_TextChanged"/>
             </DockPanel>
             <Grid DockPanel.Dock="Bottom">
@@ -18,8 +18,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="ButtonDecision" Content="決定" IsEnabled="False" Click="ButtonDecision_Click"/>
-                <Button Content="キャンセル" Grid.Column="1" IsCancel="True"/>
+                <Button x:Name="ButtonDecision" Content="Confirm" IsEnabled="False" Click="ButtonDecision_Click"/>
+                <Button Content="Cancel" Grid.Column="1" IsCancel="True"/>
             </Grid>
             <ListBox x:Name="ListBoxItem" SelectionChanged="ListBoxItem_SelectionChanged" DisplayMemberPath="Name"/>
         </DockPanel>

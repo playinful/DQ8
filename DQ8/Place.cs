@@ -24,12 +24,14 @@ namespace DQ8
 		{
 			get
 			{
-				return SaveData.Instance().ReadBit(0x2B34 + ID / 8, ID % 8);
+				// OLD: return SaveData.Instance().ReadBit(0x2B34 + ID / 8, ID % 8);
+				return SaveData.Instance().ReadBit(Offsets.GetAddress("Place") + ID / 8, ID % 8);
 			}
 
 			set
 			{
-				SaveData.Instance().WriteBit(0x2B34 + ID / 8, ID % 8, value);
+				// OLD: SaveData.Instance().WriteBit(0x2B34 + ID / 8, ID % 8, value);
+				SaveData.Instance().WriteBit(Offsets.GetAddress("Place") + ID / 8, ID % 8, value);
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Arrival)));
 			}
 		}
